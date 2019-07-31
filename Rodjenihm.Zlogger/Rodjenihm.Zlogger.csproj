@@ -42,7 +42,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Keylogger.cs" />
+    <Compile Include="Core\KeyEventArgs.cs" />
+    <Compile Include="Core\Keylogger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
