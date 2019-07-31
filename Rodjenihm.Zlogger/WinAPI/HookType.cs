@@ -4,7 +4,7 @@ namespace Rodjenihm.Zlogger.WinAPI
 {
     public delegate IntPtr HOOKPROC(int nCode, IntPtr wParam, IntPtr lParam);
 
-    public enum HookType
+    internal enum HookType
     {
         WH_MSGFILTER = -1,
         WH_JOURNALRECORD = 0,

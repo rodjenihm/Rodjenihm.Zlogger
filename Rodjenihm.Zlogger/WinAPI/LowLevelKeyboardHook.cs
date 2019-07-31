@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Rodjenihm.Zlogger.WinAPI
 {
-    public class LowLevelKeyboardHook : Hook
+    internal class LowLevelKeyboardHook : Hook
     {
         public LowLevelKeyboardHook()
         {

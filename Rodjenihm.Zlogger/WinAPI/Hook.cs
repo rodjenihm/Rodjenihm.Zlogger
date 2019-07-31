@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Rodjenihm.Zlogger.WinAPI
 {
-    public abstract class Hook
+    internal abstract class Hook
     {
         public IntPtr HookId { get; protected set; } = IntPtr.Zero;
         public HookType HookType { get; protected set; }

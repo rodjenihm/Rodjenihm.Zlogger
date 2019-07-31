@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Rodjenihm.Zlogger.WinAPI
 {
-    public static class User32
+    internal static class User32
     {
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr SetWindowsHookEx(HookType hookType, HOOKPROC lpfn, IntPtr hMod, uint dwThreadId);
