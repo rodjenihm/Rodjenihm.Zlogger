@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Core\KeyEventArgs.cs" />
     <Compile Include="Core\Keylogger.cs" />
+    <Compile Include="KeyloggerEventHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

