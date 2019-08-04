@@ -2,4 +2,7 @@
 Simple Keylogger written in C#.  
 .NET Framework 4.6.1  
 
-7.31.2019 - Version 1.0 logs KeyDown events in log.txt file. Needs a lot of improvements.
+7.31.2019 - Version 1.0 logs KeyDown events in log.txt file. Needs a lot of improvements.  
+8.2.2019 - Version 2.0 initially logs keys in StringBuilder buffer. If buffer is not empty program creates log files periodically defined by Interval property of Keylogger class.  
+
+This program logs virtual key codes. Two reasons: 1) It's faster to log down VkCode; 2) Log files cannot be read without previous "decoding". For "decoding" (using "" becuase there is really nothing to decode, it's simple conversion from vkCode to key) I will create special program that will take log file as input and output it in readable format.  
