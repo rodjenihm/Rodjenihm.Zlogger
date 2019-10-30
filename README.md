@@ -8,3 +8,5 @@ Simple Keylogger written in C#.
 
 
 This program logs virtual key codes. Two reasons: 1) It's faster to log down VkCode; 2) Log files cannot be read without previous "decoding". For "decoding" (using "" becuase there is really nothing to decode, it's simple conversion from vkCode to key) I will create special program that will take log file as input and output it in readable format.  
+
+In progress...
